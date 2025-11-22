@@ -20,7 +20,7 @@ class MainViewModel : ViewModel() {
 
     private val repository = BookRepository(ApiService())
 
-    fun searchBooks(query: String = "harry potter") {
+    fun searchBooks(query: String = "") {
         viewModelScope.launch {
             try {
                 val response = repository.searchBooks(query)
@@ -30,6 +30,7 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+
 
     fun addToFavorites(book: Book) {
         val newSet = _favorites.value.toMutableSet()

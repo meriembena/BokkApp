@@ -7,7 +7,7 @@ import io.ktor.http.*
 
 class ApiService {
 
-    private val client = HttpClientProvider.client
+    private val client = ClientProvider.client
 
     suspend fun searchBooks(query: String): BooksResponse {
         return client.get("https://openlibrary.org/search.json") {

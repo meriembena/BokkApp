@@ -57,12 +57,10 @@ android {
 }
 
 dependencies {
-    // Core & Lifecycle
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
 
-    // Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.activity.compose)
     implementation(libs.ui)
@@ -74,29 +72,19 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-    // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
-    // Retrofit & Moshi
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.moshi:moshi:1.12.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
 
-    // Kotlin Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-
-    // Ktor
-
     implementation("io.ktor:ktor-client-core:2.3.7")
     implementation("io.ktor:ktor-client-android:2.3.7")
     implementation("io.ktor:ktor-client-logging:2.3.7")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
-
-
-
-    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

@@ -7,7 +7,7 @@ import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-object HttpClientProvider {
+object ClientProvider {
 
     val client = HttpClient(Android) {
         install(ContentNegotiation) {

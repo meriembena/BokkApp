@@ -20,8 +20,9 @@ fun BooksScreen(viewModel: MainViewModel) {
     val books by viewModel.books.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.searchBooks("harry potter")
+        viewModel.searchBooks("")
     }
+
 
     val background = Brush.verticalGradient(
         colors = listOf(Color(0xFFB3E5FC), Color(0xFFE1F5FE))
