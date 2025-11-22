@@ -55,7 +55,7 @@ fun BooksScreen(viewModel: MainViewModel) {
                             color = Color(0xFF0288D1)
                         )
 
-                        val authors = book.author_name?.joinToString(", ") ?: "Auteur inconnu"
+                        val authors = book.authorName?.joinToString(", ") ?: "Auteur inconnu"
                         Text(
                             text = "Auteur(s) : $authors",
                             style = MaterialTheme.typography.bodyMedium.copy(fontSize = 14.sp),

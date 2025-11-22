@@ -1,19 +1,13 @@
 package com.example.monapp.ui.interfaces
 
-import com.example.monapp.models.Book
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.shadow
@@ -22,10 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.monapp.models.Book
 import com.example.monapp.viewmodel.MainViewModel
-import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.collections.get
 
 @Composable
 fun BookDetailsScreen(
@@ -39,8 +32,6 @@ fun BookDetailsScreen(
 
     val favorites by viewModel.favorites.collectAsState()
     val isFavorite = favorites.contains(book)
-
-
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -72,8 +63,9 @@ fun BookDetailsScreen(
                 modifier = Modifier.padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Image
-                book.cover_url?.let { url ->
+
+                // Image de couverture
+                book.coverUrl?.let { url ->
                     Image(
                         painter = rememberAsyncImagePainter(url),
                         contentDescription = "Couverture du livre",
@@ -84,24 +76,27 @@ fun BookDetailsScreen(
                     )
                 }
 
+                // Titre
                 Text(
-                    text = book.title ?: "Titre inconnu",
+                    text = book.title.ifEmpty { "Titre inconnu" },
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontSize = 28.sp,
                         color = Color(0xFF0288D1)
                     )
                 )
 
-                val authors = book.author_name?.joinToString(", ") ?: "Auteur inconnu"
+                // Auteur(s)
+                val authors = book.authorName.joinToString(", ").ifEmpty { "Auteur inconnu" }
                 Text(
                     text = "Auteur(s) : $authors",
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
                     color = Color(0xFF555555)
                 )
 
-                book.first_publish_year?.let {
+                // Année
+                book.firstPublishYear?.let { year ->
                     Text(
-                        text = "Année de publication : $it",
+                        text = "Année de publication : $year",
                         style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp),
                         color = Color(0xFF777777)
                     )
@@ -111,15 +106,10 @@ fun BookDetailsScreen(
                 Divider(color = Color(0xFFB0BEC5), thickness = 1.dp)
                 Spacer(modifier = Modifier.height(16.dp))
 
-                val descriptionText = when (val desc = book.description) {
-                    is String -> desc
-                    is Map<*, *> -> desc["value"] as? String
-                    else -> null
-                }
-
-                descriptionText?.let {
+                // Description (String ou null)
+                book.description?.let { desc ->
                     Text(
-                        text = it,
+                        text = desc,
                         style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp),
                         color = Color(0xFF555555)
                     )
@@ -127,6 +117,7 @@ fun BookDetailsScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
+                // Bouton favoris
                 Button(
                     onClick = {
                         if (isFavorite) {
@@ -155,5 +146,3 @@ fun BookDetailsScreen(
         }
     }
 }
-
-private fun MainViewModel.removeFromFavorites(book: Book) {}

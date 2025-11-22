@@ -28,6 +28,7 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
+
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -130,7 +131,7 @@ fun BooksScreen(
 
         val filteredBooks = books.filter { book ->
             val titleMatch = book.title?.contains(titleFilter, ignoreCase = true) ?: false
-            val authorMatch = book.author_name?.any { it.contains(authorFilter, ignoreCase = true) } ?: false
+            val authorMatch = book.authorName?.any { it.contains(authorFilter, ignoreCase = true) } ?: false
             (titleMatch || titleFilter.isEmpty()) && (authorMatch || authorFilter.isEmpty())
         }
 
@@ -169,20 +170,22 @@ fun BookCard(book: Book, navController: NavHostController) {
                 color = Color(0xFF0288D1)
             )
 
-            val authors = book.author_name?.joinToString(", ") ?: "Auteur inconnu"
+            val authors = book.authorName?.joinToString(", ") ?: "Auteur inconnu"
             Text(
                 text = "Auteur(s) : $authors",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.DarkGray
             )
 
-            book.first_publish_year?.let {
+            book.firstPublishYear?.let { year ->
                 Text(
-                    text = "Année : $it",
+                    text = "Année : $year",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
             }
+
+
         }
     }
 }

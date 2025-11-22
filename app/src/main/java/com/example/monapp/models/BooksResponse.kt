@@ -1,9 +1,10 @@
 package com.example.monapp.models
 
-import com.example.monapp.models.Book
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-
+@Serializable
 data class BooksResponse(
+    @SerialName("docs")
     val docs: List<Book>
 )
-
