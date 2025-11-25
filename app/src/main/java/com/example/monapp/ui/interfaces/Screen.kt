@@ -27,11 +27,9 @@ fun Screen() {
             DrawerContent(navController = navController)
         }
     ) {
-
         Scaffold(
             topBar = {
                 AppBar(
-                    viewModel = viewModel,
                     navController = navController,
                     drawerState = drawerState
                 )
@@ -40,10 +38,9 @@ fun Screen() {
         ) { padding ->
             AppNavHost(
                 navController = navController,
-                modifier = Modifier.padding(padding)
+                modifier = Modifier.padding(padding),
+                viewModel = viewModel
             )
         }
     }
 }
-
-

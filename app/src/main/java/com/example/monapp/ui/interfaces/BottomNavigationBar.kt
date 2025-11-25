@@ -1,10 +1,8 @@
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,32 +16,46 @@ fun BottomNavigationBar(navController: NavHostController) {
     NavigationBar(
         containerColor = Color(0xFF0288D1),
         contentColor = Color.White,
-        modifier = Modifier.height(50.dp)
+        modifier = Modifier.height(60.dp)
     ) {
         NavigationBarItem(
             icon = {
                 Icon(
-                    painterResource(R.drawable.icon),
+                    painter = painterResource(R.drawable.icon),
                     contentDescription = "Livres",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(28.dp) // Taille moyenne
                 )
             },
-            label = {
-                Text(
-                    "Livres",
-                    style = MaterialTheme.typography.labelSmall
-                )
-            },
-            selected = navController.currentDestination?.route == "books",
+            label = { Text("Livres") },
+            selected = navController.currentDestination?.route?.startsWith("books") == true,
             onClick = { navController.navigate("books") }
         )
 
         NavigationBarItem(
-            icon = { Icon(painterResource(R.drawable.favoris), contentDescription = "Favoris", modifier = Modifier.size(30.dp)) },
-            label = { Text("Favoris", style = MaterialTheme.typography.labelSmall) },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.recherche),
+                    contentDescription = "Recherche",
+                    modifier = Modifier.size(28.dp)
+                )
+            },
+            label = { Text("Recherche") },
+            selected = navController.currentDestination?.route == "search",
+            onClick = { navController.navigate("search") }
+        )
+
+        NavigationBarItem(
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.favoris),
+                    contentDescription = "Favoris",
+                    modifier = Modifier.size(28.dp)
+                )
+            },
+            label = { Text("Favoris") },
             selected = navController.currentDestination?.route == "favoris",
             onClick = { navController.navigate("favoris") }
         )
-
     }
 }
+

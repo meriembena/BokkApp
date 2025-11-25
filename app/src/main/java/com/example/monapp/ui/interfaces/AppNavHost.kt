@@ -1,7 +1,6 @@
 package com.example.monapp.ui.interfaces
 
 import com.example.monapp.models.Book
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,12 +21,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.monapp.ui.theme.Purple80
 import com.example.monapp.viewmodel.MainViewModel
 import view.HomeScreen
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-
+import kotlinx.coroutines.delay
 
 @Composable
 fun AppNavHost(
@@ -49,6 +49,9 @@ fun AppNavHost(
         composable("favoris") {
             FavorisScreen(viewModel)
         }
+        composable("search") {
+            SearchBooksScreen(viewModel,navController)
+        }
         composable(
             route = "books?query={query}",
             arguments = listOf(navArgument("query") {
@@ -59,7 +62,6 @@ fun AppNavHost(
             val query = backStackEntry.arguments?.getString("query") ?: "science"
             BooksScreen(navController, viewModel, query)
         }
-
         composable(
             route = "bookDetails/{bookTitle}",
             arguments = listOf(navArgument("bookTitle") { type = NavType.StringType })
@@ -82,10 +84,10 @@ fun AppNavHost(
                 }
             }
         }
-
-
     }
 }
+
+
 
 @Composable
 fun BooksScreen(
@@ -94,11 +96,27 @@ fun BooksScreen(
     query: String
 ) {
     val books by viewModel.books.collectAsState()
+    var showFilters by remember { mutableStateOf(false) }
     var titleFilter by remember { mutableStateOf("") }
     var authorFilter by remember { mutableStateOf("") }
+    var applyFilter by remember { mutableStateOf(false) }
+    var showMessage by remember { mutableStateOf(true) } // état pour le message
 
     LaunchedEffect(query) {
         viewModel.searchBooks(query)
+        // Message affiché 1.5 secondes puis disparaît
+        showMessage = true
+        delay(3500)
+        showMessage = false
+    }
+
+    val filteredBooks = remember(applyFilter, titleFilter, authorFilter, books) {
+        if (!applyFilter) books
+        else books.filter { book ->
+            val titleMatch = book.title?.contains(titleFilter, ignoreCase = true) ?: false
+            val authorMatch = book.authorName?.any { it.contains(authorFilter, ignoreCase = true) } ?: false
+            (titleMatch || titleFilter.isEmpty()) && (authorMatch || authorFilter.isEmpty())
+        }
     }
 
     val background = Brush.verticalGradient(
@@ -111,32 +129,70 @@ fun BooksScreen(
             .background(background)
             .padding(8.dp)
     ) {
-        OutlinedTextField(
-            value = titleFilter,
-            onValueChange = { titleFilter = it },
-            label = { Text("Filtrer par titre") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
-        )
+        // Bouton pour afficher/cacher les filtres
+        Button(
+            onClick = { showFilters = !showFilters },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Purple80)
+        ) {
+            Text(if (showFilters) "Cacher les filtres" else "Filtrer")
+        }
 
-        OutlinedTextField(
-            value = authorFilter,
-            onValueChange = { authorFilter = it },
-            label = { Text("Filtrer par auteur") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
-        )
+        Spacer(modifier = Modifier.height(8.dp))
 
-        val filteredBooks = books.filter { book ->
-            val titleMatch = book.title?.contains(titleFilter, ignoreCase = true) ?: false
-            val authorMatch = book.authorName?.any { it.contains(authorFilter, ignoreCase = true) } ?: false
-            (titleMatch || titleFilter.isEmpty()) && (authorMatch || authorFilter.isEmpty())
+        if (showFilters) {
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    OutlinedTextField(
+                        value = titleFilter,
+                        onValueChange = { titleFilter = it },
+                        label = { Text("Filtrer par titre") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = authorFilter,
+                        onValueChange = { authorFilter = it },
+                        label = { Text("Filtrer par auteur") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                        onClick = { applyFilter = true },
+                        modifier = Modifier.align(Alignment.End),
+                        colors = ButtonDefaults.buttonColors(containerColor = Purple80)
+                    ) {
+                        Text("Appliquer")
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        // Affichage du message temporaire
+        if (showMessage) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "Patientez 1 seconde… la liste apparaît",
+                    color = Color.DarkGray,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
         ) {
             items(filteredBooks) { book ->
                 BookCard(book = book, navController = navController)
@@ -184,9 +240,6 @@ fun BookCard(book: Book, navController: NavHostController) {
                     color = Color.Gray
                 )
             }
-
-
         }
     }
 }
-
