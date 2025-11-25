@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.monapp.R
-
+import com.example.monapp.ui.theme.Purple80
 
 @Composable
 fun AboutScreen(navController: NavHostController) {
@@ -128,7 +128,10 @@ fun AboutScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(onClick = { navController.popBackStack() }) {
+        Button(
+            onClick = { navController.popBackStack() },
+            colors = ButtonDefaults.buttonColors(containerColor = Purple80)
+        ) {
             Text("Retour")
         }
     }

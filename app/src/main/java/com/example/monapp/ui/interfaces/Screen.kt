@@ -12,11 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.monapp.viewmodel.MainViewModel
+import com.example.monapp.viewmodel.SettingsViewModel
 
 @Composable
 fun Screen() {
     val navController = rememberNavController()
-    val viewModel: MainViewModel = viewModel()
+    val mainViewModel: MainViewModel = viewModel()
+    val settingsViewModel: SettingsViewModel = viewModel()
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -24,7 +26,10 @@ fun Screen() {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            DrawerContent(navController = navController)
+            DrawerContent(
+                navController = navController,
+                drawerState = drawerState
+            )
         }
     ) {
         Scaffold(
@@ -39,7 +44,8 @@ fun Screen() {
             AppNavHost(
                 navController = navController,
                 modifier = Modifier.padding(padding),
-                viewModel = viewModel
+                viewModel = mainViewModel,
+                settingsViewModel = settingsViewModel
             )
         }
     }

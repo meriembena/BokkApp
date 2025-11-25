@@ -60,10 +60,8 @@ fun HomeScreen(navController: NavHostController, modifier: Modifier = Modifier) 
             )
 
             Spacer(modifier = Modifier.height(30.dp))
-
-            // Dans HomeScreen.kt, ligne où tu as le bouton
             Button(
-                onClick = { navController.navigate("books?query=science") }, // ← Ajoute la query ici
+                onClick = { navController.navigate("books?query=science") },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0288D1)),
                 shape = RoundedCornerShape(20.dp),
                 modifier = buttonModifier

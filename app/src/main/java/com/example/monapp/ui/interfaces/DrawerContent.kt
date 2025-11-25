@@ -1,14 +1,22 @@
 package com.example.monapp.ui.interfaces
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 
 @Composable
-fun DrawerContent(navController: NavHostController) {
+fun DrawerContent(
+    navController: NavHostController,
+    drawerState: DrawerState
+) {
+    val scope = rememberCoroutineScope()
 
     ModalDrawerSheet {
 
@@ -19,21 +27,51 @@ fun DrawerContent(navController: NavHostController) {
         )
 
         NavigationDrawerItem(
+            icon = { Icon(Icons.Default.Home, contentDescription = null) },
             label = { Text("Accueil") },
             selected = false,
-            onClick = { navController.navigate("home") }
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                }
+                navController.navigate("home")
+            }
         )
 
         NavigationDrawerItem(
+            icon = { Icon(Icons.Default.List, contentDescription = null) },
             label = { Text("Liste des livres") },
             selected = false,
-            onClick = { navController.navigate("books") }
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                }
+                navController.navigate("books")
+            }
         )
 
         NavigationDrawerItem(
-            label = { Text("À propos de l’app") },
+            icon = { Icon(Icons.Default.Settings, contentDescription = null) },
+            label = { Text("Réglages") },
             selected = false,
-            onClick = { navController.navigate("about") }
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                }
+                navController.navigate("settings")
+            }
+        )
+
+        NavigationDrawerItem(
+            icon = { Icon(Icons.Default.Info, contentDescription = null) },
+            label = { Text("À propos de l'app") },
+            selected = false,
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                }
+                navController.navigate("about")
+            }
         )
     }
 }

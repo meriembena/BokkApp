@@ -64,7 +64,6 @@ fun BookDetailsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // Image de couverture
                 book.coverUrl?.let { url ->
                     Image(
                         painter = rememberAsyncImagePainter(url),
@@ -75,8 +74,6 @@ fun BookDetailsScreen(
                             .padding(bottom = 16.dp)
                     )
                 }
-
-                // Titre
                 Text(
                     text = book.title.ifEmpty { "Titre inconnu" },
                     style = MaterialTheme.typography.titleLarge.copy(
@@ -85,15 +82,12 @@ fun BookDetailsScreen(
                     )
                 )
 
-                // Auteur(s)
                 val authors = book.authorName.joinToString(", ").ifEmpty { "Auteur inconnu" }
                 Text(
                     text = "Auteur(s) : $authors",
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
                     color = Color(0xFF555555)
                 )
-
-                // Année
                 book.firstPublishYear?.let { year ->
                     Text(
                         text = "Année de publication : $year",
@@ -105,8 +99,6 @@ fun BookDetailsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Divider(color = Color(0xFFB0BEC5), thickness = 1.dp)
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // Description (String ou null)
                 book.description?.let { desc ->
                     Text(
                         text = desc,
@@ -116,8 +108,6 @@ fun BookDetailsScreen(
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
-
-                // Bouton favoris
                 Button(
                     onClick = {
                         if (isFavorite) {

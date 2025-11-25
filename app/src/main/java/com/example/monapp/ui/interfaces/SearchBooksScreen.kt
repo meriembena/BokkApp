@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.monapp.models.Book
+import com.example.monapp.ui.theme.Purple80
 import com.example.monapp.viewmodel.MainViewModel
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -17,10 +18,8 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun SearchBooksScreen(viewModel: MainViewModel, navController: NavHostController) {
     var query by remember { mutableStateOf("") }
-    var searchTriggered by remember { mutableStateOf(false) } // pour savoir si on a cliqué sur rechercher
+    var searchTriggered by remember { mutableStateOf(false) }
     val books by viewModel.books.collectAsState()
-
-    // Liste filtrée, mise à jour seulement quand searchTriggered = true
     val filteredBooks = remember(searchTriggered, query, books) {
         if (!searchTriggered || query.isEmpty()) emptyList()
         else books.filter { book ->
@@ -29,15 +28,17 @@ fun SearchBooksScreen(viewModel: MainViewModel, navController: NavHostController
         }
     }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(8.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
 
         OutlinedTextField(
             value = query,
             onValueChange = {
                 query = it
-                searchTriggered = false // réinitialiser la recherche à chaque modification
+                searchTriggered = false
             },
             label = { Text("Rechercher un livre") },
             modifier = Modifier.fillMaxWidth()
@@ -47,7 +48,8 @@ fun SearchBooksScreen(viewModel: MainViewModel, navController: NavHostController
 
         Button(
             onClick = { searchTriggered = true },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Purple80)
         ) {
             Text("Rechercher")
         }

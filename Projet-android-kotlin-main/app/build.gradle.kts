@@ -66,7 +66,7 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
     implementation("androidx.compose.ui:ui:1.5.0")
     implementation ("androidx.compose.material:material:1.4.2")
     implementation("androidx.compose.runtime:runtime:1.5.0")
